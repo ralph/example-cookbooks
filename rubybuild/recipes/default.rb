@@ -24,7 +24,7 @@ execute "checkinstall -y -D --pkgname=ruby1.9 --pkgversion=#{node[:ruby][:versio
   cwd "/tmp/#{node[:ruby][:basename]}"
 end
 
-template "/root/.s3cfg" do
+template "#{ENV["HOME"]}/.s3cfg" do
   source "s3cfg.erb"
   only_if do
     node[:ruby][:s3][:upload]
