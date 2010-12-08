@@ -1,4 +1,10 @@
 execute "apt-get update"
+package "s3cmd" do
+  only_if do
+    node[:ruby][:s3][:upload]
+  end
+end
+
 package "checkinstall"
 package "libffi-dev"
 
@@ -16,4 +22,18 @@ end
 
 execute "checkinstall -y -D --pkgname=ruby1.9 --pkgversion=#{node[:ruby][:version]} --pkgrelease=#{node[:ruby][:patch]}.#{node[:ruby][:pkgrelease]} --maintainer=mathias.meyer@scalarium.com --pkggroup=ruby --pkglicense='Ruby License' make all install" do
   cwd "/tmp/#{node[:ruby][:basename]}"
+end
+
+template "/root/.s3cfg" do
+  source "s3cfg.erb"
+  only_if do
+    node[:ruby][:s3][:upload]
+  end
+end
+
+execute "s3cmd put --acl-public --guess-mime-type #{node[:ruby][:deb]} s3://#{node[:ruby][:s3][:bucket]}/#{node[:ruby][:deb]}" do
+  cwd "/tmp/#{node[:ruby][:basename]}"
+  only_if do
+    node[:ruby][:s3][:upload]
+  end
 end
