@@ -31,7 +31,7 @@ template "#{ENV["HOME"]}/.s3cfg" do
   end
 end
 
-execute "s3cmd put --acl-public --guess-mime-type #{node[:ruby][:deb]} s3://#{node[:ruby][:s3][:bucket]}/#{node[:ruby][:deb]}" do
+execute "s3cmd put --acl-public --guess-mime-type #{node[:ruby][:deb]} s3://#{node[:ruby][:s3][:bucket]}/#{node[:ruby][:s3][:path]}/" do
   cwd "/tmp/#{node[:ruby][:basename]}"
   only_if do
     node[:ruby][:s3][:upload]
