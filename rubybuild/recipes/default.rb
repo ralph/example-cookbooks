@@ -24,16 +24,21 @@ execute "checkinstall -y -D --pkgname=ruby1.9 --pkgversion=#{node[:ruby][:versio
   cwd "/tmp/#{node[:ruby][:basename]}"
 end
 
-template "#{ENV["HOME"]}/.s3cfg" do
+template "/tmp/.s3cfg" do
   source "s3cfg.erb"
   only_if do
     node[:ruby][:s3][:upload]
   end
 end
 
-execute "s3cmd put --acl-public --guess-mime-type #{node[:ruby][:deb]} s3://#{node[:ruby][:s3][:bucket]}/#{node[:ruby][:s3][:path]}/" do
+execute "s3cmd -c /tmp/.s3cfg put --acl-public --guess-mime-type #{node[:ruby][:deb]} s3://#{node[:ruby][:s3][:bucket]}/#{node[:ruby][:s3][:path]}/" do
   cwd "/tmp/#{node[:ruby][:basename]}"
   only_if do
     node[:ruby][:s3][:upload]
   end
+end
+
+file "/tmp/.s3cfg" do
+  action :delete
+  backup false
 end

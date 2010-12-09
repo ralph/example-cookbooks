@@ -10,6 +10,6 @@ default[:ruby][:deb] = "ruby1.9_#{node[:ruby][:version]}-#{node[:ruby][:patch]}.
 default[:ruby][:s3] = {}
 default[:ruby][:s3][:upload] = false
 default[:ruby][:s3][:bucket] = ''
-default[:ruby][:s3][:path] = "#{node[:platform]}/#{node[:platform_version]}/#{node[:ruby][:deb]}"
+default[:ruby][:s3][:path] = "#{node[:platform]}/#{node[:platform_version]}"
 default[:ruby][:s3][:aws_access_key] = ""
 default[:ruby][:s3][:aws_secret_access_key] = ""
