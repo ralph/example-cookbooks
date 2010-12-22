@@ -5,6 +5,11 @@ include_recipe "deploy::directory"
 # App Server.
 unless node[:scalarium][:instance][:roles].include?('rails-app')
   node[:deploy].each do |application, deploy|
+    prepare_git_checkouts(:user => deploy[:user], 
+                        :group => deploy[:group], 
+                        :home => deploy[:home], 
+                        :ssh_key => deploy[:scm][:ssh_key]) if deploy[:scm][:scm_type].to_s == 'git'
+
     %w(log config system pids).each do |dir_name|
       directory "#{deploy[:deploy_to]}/shared/#{dir_name}" do
         group deploy[:group]
