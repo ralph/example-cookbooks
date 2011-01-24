@@ -1,0 +1,9 @@
+K 15
+svn:realmstring
+V 62
+<https://ssl.svn.example.com:443> Authorization Realm
+K 8
+username
+V 6
+deploy
+END

@@ -1,0 +1,13 @@
+K 10
+ascii_cert
+V 1924
+HAS-GOES-HERE
+K 8
+failures
+V 1
+8
+K 15
+svn:realmstring
+V 40
+https://ssl.svn.example.com:443
+END
