@@ -1,2 +1,2 @@
-default[:bundler] = {}
-default[:bundler][:version] = '1.0.0'
+default[:bundler][:version] = '1.0.7'
+default[:rubygems][:version] = '1.3.7'
