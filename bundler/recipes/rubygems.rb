@@ -18,6 +18,6 @@ execute "Updating Rubygems to #{node[:rubygems][:version]}" do
   cwd "/tmp/rubygems-#{node[:rubygems][:version]}"
   umask 022
   not_if do
-    File.exists?('/usr/local/bin/gem') && `/usr/local/bin/gem -v`.strip == node[:rubygems][:version]
+    File.exists?(node[:bundler][:gem_binary]) && `#{node[:bundler][:gem_binary]} -v`.strip == node[:rubygems][:version]
   end
 end
