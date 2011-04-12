@@ -12,14 +12,14 @@ node[:deploy].each do |application, deploy|
     action :nothing
   end
   
-  redis_server = node[:scalarium][:roles][:redis][:instances].keys.first
+  redis_server = node[:scalarium][:roles][:redis][:instances].keys.first rescue nil
   
   template "#{deploy[:deploy_to]}/current/config/redis.yml" do
     source "redis.yml.erb"
     mode "0660"
     group deploy[:group]
     owner deploy[:user]
-    variables(:host => node[:scalarium][:roles][:redis][:instances][redis_server][:private_dns_name])
+    variables(:host => (node[:scalarium][:roles][:redis][:instances][redis_server][:private_dns_name] rescue nil))
     
     if deploy[:stack][:needs_reload]
       notifies :run, resources(:execute => "restart Rails app #{application}")
