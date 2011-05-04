@@ -13,6 +13,7 @@ end
 
 gem_package "sunspot" do
   action :install
+  version '1.2.1'
   retries 2
 end
 
