@@ -1,8 +1,8 @@
 default[:rubybuild] = {}
 default[:rubybuild][:version] = '1.9.2'
-default[:rubybuild][:patch] = 'p136'
+default[:rubybuild][:patch] = 'p180'
 default[:rubybuild][:basename] = "ruby-#{node[:rubybuild][:version]}-#{node[:rubybuild][:patch]}"
-default[:rubybuild][:pkgrelease] = '2'
+default[:rubybuild][:pkgrelease] = '3'
 default[:rubybuild][:prefix] = '/usr/local'
 default[:rubybuild][:configure] = '--enable-shared --disable-install-doc'
 default[:rubybuild][:arch] = node[:kernel][:machine] == 'x86_64' ? 'amd64' : 'i386'
