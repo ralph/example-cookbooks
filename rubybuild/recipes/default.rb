@@ -8,6 +8,7 @@ end
 
 package "checkinstall"
 package "libffi-dev"
+package 'libreadline-dev'
 
 remote_file "/tmp/#{node[:rubybuild][:basename]}.tar.bz2" do
   source "http://ftp.ruby-lang.org/pub/ruby/#{node[:rubybuild][:basename]}.tar.bz2"
