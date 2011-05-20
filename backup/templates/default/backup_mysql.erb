@@ -1,0 +1,30 @@
+#!/usr/local/bin/ruby
+
+BACKUP_DIR = "<%= node[:backup][:mysql][:directory] %>/mysql"
+KEEP_MAX = <%= node[:backup][:mysql][:keep] %>
+MYSQL_PW = "<%= node[:mysql][:server_root_password]%>"
+
+def backup(db)
+  now = Time.now.strftime("%Y_%m_%d_%H_%M_%S")
+  puts "Creating a new backup in #{BACKUP_DIR}/#{db}"
+  `mkdir -p #{BACKUP_DIR}/#{db}/`
+  `/usr/bin/mysqldump -u root -p#{MYSQL_PW} #{db} | gzip > #{BACKUP_DIR}/#{db}/#{now}_#{db}.sql.gz`
+end
+
+def cleanup_old(db)
+  puts "Cleaning old backups in #{BACKUP_DIR}/#{db}"
+  found_backups = Dir.glob("#{BACKUP_DIR}/#{db}/*").sort.reverse
+  if found_backups.size > KEEP_MAX
+    found_backups[KEEP_MAX, 9999999].each do |backup|
+      puts "Deleting old backup #{backup}"
+      `rm -rf #{backup}`
+    end
+  else
+    puts "Keep all backups - #{found_backups.size}/#{KEEP_MAX}"
+  end
+end
+
+<% node[:backup][:mysql][:databases].each do |db| %>
+  backup('<%= db %>')
+  cleanup_old('<%= db %>')
+<% end %>

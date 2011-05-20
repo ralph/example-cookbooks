@@ -1,15 +1,18 @@
-directory "#{node[:backup][:directory]}/mysql" do
+package "gzip"
+
+directory "#{node[:backup][:mysql][:directory]}/mysql" do
   action :create
   recursive true
   mode 0750
 end
 
-node[:backup][:databases].each_with_index do |db, index|
+template "/root/backup_mysql" do
+  source 'backup_mysql.erb'
+  mode '755'
+end
 
-  cron "Backup MySQL #{db}" do
-    minute "15"
-    hour( (2 + index).to_s)
-    command "mysqldump -u root -p#{node[:mysql][:server_root_password]} #{db} | gzip > #{node[:backup][:directory]}/mysql/#{db}_`date +%Y_%m_%d_%H_%M_%S`.sql.gz"
-  end
-
+cron "Backup MySQL" do
+  minute "15"
+  hour "2"
+  command "/root/backup_mysql"
 end
