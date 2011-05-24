@@ -48,7 +48,11 @@ unless node[:scalarium][:instance][:roles].include?('rails-app')
       end
       before_migrate lambda{}
       after_restart lambda{}
-      before_symlink lambda{}
+      before_symlink do
+        if deploy[:auto_bundle_on_deploy]
+          Scalarium::RailsConfiguration.bundle(application, node[:deploy][application], release_path)
+        end
+      end
       before_restart lambda{}
     end
 
