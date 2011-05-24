@@ -1,10 +1,14 @@
-include_recipe "deploy::user"
-include_recipe "deploy::directory"
-
 # No need to check out the source when we're on a Rails
 # App Server.
 unless node[:scalarium][:instance][:roles].include?('rails-app')
   node[:deploy].each do |application, deploy|
+    if deploy[:application_type] != 'rails'
+      Chef::Log.debug("Skipping sphinx::deploy as application #{application} is not a Rails application")
+      next
+    else
+      Chef::Log.debug("Running sphinx::deploy for Rails application #{application}")
+    end
+
     prepare_git_checkouts(:user => deploy[:user], 
                         :group => deploy[:group], 
                         :home => deploy[:home], 
@@ -75,6 +79,13 @@ end
 include_recipe 'sphinx::client'
 
 node[:deploy].each do |application, deploy|
+  if deploy[:application_type] != 'rails'
+    Chef::Log.debug("Skipping sphinx::deploy as application #{application} is not a Rails application")
+    next
+  else
+    Chef::Log.debug("Running sphinx::deploy for Rails application #{application}")
+  end
+
   directory "/var/log/sphinx" do
     action :create
     owner deploy[:user]

@@ -2,6 +2,8 @@ node[:deploy].each do |application, deploy|
   if deploy[:application_type] != 'rails'
     Chef::Log.debug("Skipping sphinx::client as application #{application} is not a Rails application")
     next
+  else
+    Chef::Log.debug("Running sphinx::client for Rails application #{application}")
   end
  
   directory "#{deploy[:deploy_to]}/current/config/thinkingsphinx" do
