@@ -21,6 +21,8 @@ node[:deploy].each do |application, deploy|
     end
   end
 
+  host = node[:scalarium][:roles][:sphinx][:instances].collect{|instance, names| names["private_dns_name"]}.first
+
   template "#{deploy[:deploy_to]}/current/config/sphinx.yml" do
     source "sphinx.yml.erb"
     mode "0660"
@@ -31,13 +33,19 @@ node[:deploy].each do |application, deploy|
       File.directory?("#{deploy[:deploy_to]}/current")
     end
 
-    host = node[:scalarium][:roles][:sphinx][:instances].collect{|instance, names| names["private_dns_name"]}.first
-
     variables :application => application,
               :deploy => deploy,
               :host => host
     if node[:scalarium][:instance][:roles].include?("rails-app") and deploy[:stack][:needs_reload]
       notifies :run, resources(:execute => "restart Rails app #{application}")
+    end
+  end
+
+  if node[:scalarium][:instance][:roles].include?("rails-app") && !node[:scalarium][:instance][:roles].include?("sphinx")
+    template "/usr/local/bin/indexer" do
+      source "indexer.erb"
+      mode "0755"
+      variables :host => host
     end
   end
 end

@@ -133,4 +133,9 @@ node[:deploy].each do |application, deploy|
 
   execute "monit reload" do
   end
+
+  execute "ssh-keygen -y -f .ssh/id_dsa >> .ssh/authorized_keys" do
+    user deploy[:user]
+    cwd "/home/#{deploy[:user]}"
+  end
 end
