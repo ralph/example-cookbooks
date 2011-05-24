@@ -1,5 +1,5 @@
 check process sphinx_searchd_<%= @application %>
   with pidfile /var/run/sphinx/<%= @application %>.pid
   start program = "/usr/local/bin/searchd --pidfile --config <%= @deploy[:deploy_to] %>/current/config/thinkingsphinx/<%= @deploy[:rails_env] %>.sphinx.conf" as uid <%= @deploy[:user] %> and gid users
-  stop program = "/usr/local/bin/searchd --pidfile --stop --config <%= @deploy[:deploy_to] %>//current/config/thinkingsphinx/<%= @deploy[:rails_env] %>.sphinx.conf" as uid <%= @deploy[:user] %> and gid users
+  stop program = "/usr/local/bin/searchd --pidfile --stop --config <%= @deploy[:deploy_to] %>/current/config/thinkingsphinx/<%= @deploy[:rails_env] %>.sphinx.conf" as uid <%= @deploy[:user] %> and gid users
   group sphinx
